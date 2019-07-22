@@ -1,16 +1,25 @@
 <template>
   <div style="padding:50px;">
+<<<<<<< HEAD
     <h1 style="margin-bottom:50px;">组件递归</h1>
     <button @click="handleClick">写游记</button>
     <!-- <NavsItem :data="nav s" /> -->
+=======
+     <h1 style="margin-bottom:50px;">组件递归</h1>
+    
+    <NavsItem :data="navs"/>
+    <PostTest/>
+>>>>>>> a25ef757108f938bb1e0373ee0fa3e86044e57c1
   </div>
 </template>
 
 <script>
 
 import NavsItem from "@/components/post/navsItem";
+import PostTest from "@/components/post/postTest";
 
 export default {
+<<<<<<< HEAD
   components: {
     NavsItem,
   },
@@ -23,6 +32,15 @@ export default {
             {
               title: "男装",
               children: [
+=======
+    components: {
+        NavsItem,
+        PostTest
+    },
+    data(){
+        return {
+            navs: [
+>>>>>>> a25ef757108f938bb1e0373ee0fa3e86044e57c1
                 {
                   title: "T恤",
                   children: [
