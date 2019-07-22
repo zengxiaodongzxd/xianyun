@@ -1,10 +1,10 @@
 <template>
-    <div class="div">
+    <div class="container">
         <div v-for="(item, index) in  data" :key="index">
             {{ item.content }}
-
+        
             <!-- 自己调用自己 -->
-            <NavsItem :data="item.followed" />
+            <commentItem :data="item.followed" />
         </div>
     </div>
 </template>
@@ -12,13 +12,13 @@
 <script>
 export default {
     // 1.先命名name, 在当前组件内可以通过name自己调用自己
-    name: "NavsItem",
+    name: "commentItem",
     props: ["data"]
 }
 </script>
 
 <style scoped>
-    .div  div{
+    .container  >div{
         margin-left:20px;
     }
 </style>
