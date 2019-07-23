@@ -8,6 +8,7 @@
           type="text"
           placeholder="请输入标题"
           v-model="editList.title"
+          style="padding-left:5px"
         >
       </div>
       <!-- 富文本 -->
@@ -25,8 +26,10 @@
           placeholder="请搜索游玩城市"
           style="margin-left:10px"
           v-model="editList.city"
+            :fetch-suggestions="querySearchCountry"
+            @select="handleSelect"
         ></el-autocomplete>
-        <div class="cao">
+        <div class="release">
           <el-button type="primary"  @click="handleRelease">发布</el-button>
           <span>或者</span>
           <nuxt-link to="#">保存到草稿</nuxt-link>
@@ -57,14 +60,8 @@ export default {
           // 工具栏
           toolbar: [
             ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-            ['blockquote', 'code-block'],
-            ['image', 'video'],
-
-            [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-            [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
-            [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
-            [{ 'direction': 'rtl' }],                         // text direction
+             [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+            ['image', 'video']
           ]
         },
         // 主题
@@ -108,8 +105,50 @@ export default {
     VueEditor
   },
   methods:{
+    // 输入文字时候触发
+    // value是输入框的值
+    // cb 是回调函数,
+    querySearchCountry(value,cb){
+      if(!value.trim()){
+        // 不显示下拉菜单
+        cb([])
+        return;
+      }
+
+      this.$axios({
+        url:"/airs/city",
+        params:{
+          // 搜索关键字，输入框的值
+          name:value
+        }
+      }).then(res=>{
+        // console.log(res.data);
+        const {data} = res.data;
+
+        // 添加value属性，值等于name
+        const newData = data.map(v=>{
+          return {
+            ...v,
+            value:v.name,
+          }
+        })
+      // 默认选中下拉菜单的第一个
+      this.editList.city = newData[0].value
+      cb(newData)
+        
+      })
+
+    },
+    // 游玩城市下拉选择时触发
+    handleSelect(item){
+      // console.log(item);
+      // 把选中对象值赋给表单
+      this.editList.city = item.value
+    },
     // 点击发布按钮时触发
     handleRelease(){
+      // this.$router.push("/post")
+      
       // 数据拼接
       const data ={
         // content:this.editList.content,
@@ -118,7 +157,6 @@ export default {
         city:this.editList.city,
       }
       // console.log(data);
-
       //  自定义验证
       const rules = {
         title: {
@@ -134,20 +172,33 @@ export default {
           message: "城市不能空"
         },
       }
+      // console.log(Object.keys(rules));
+      // 验证结果，初始值是true
+      let valid = true;
+      Object.keys(rules).forEach(v=>{
+        if(!valid) return;
+
+        // 如果字段的值为空
+        if(!rules[v].value){
+          valid = false;
+          this.$message.warning(rules[v].message)
+        }
+      })
       
+      if(!valid) return;  
+
       // 提交攻略
       this.$axios({
         url:"/posts",
         method:"POST",
         data,
-                //  添加授权的头信息
+        //  添加授权的头信息
         headers: {
           // 下面请求头信息不是通用的，针对当前的项目的（基于JWT token标准）
           Authorization: `Bearer ${this.$store.state.user.userInfo.token}`
         }
       }).then(res=>{
-        console.log(res);
-        
+        this.$message.success("新增成功")
       })
     }
   }
@@ -172,7 +223,7 @@ export default {
     height: 36px;
     border: 1px solid #ccc;
   }
-  .cao {
+  .release {
     // display: block;
     margin-top: 20px;
   }

@@ -4,7 +4,7 @@
     <!-- 左侧富文本 -->
     <VueEditor />
     <!-- 右侧草稿箱 -->
-    <!-- <Draft /> -->
+    <Draft />
     </el-row>
   </div>
 </template>
