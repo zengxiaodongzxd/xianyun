@@ -17,10 +17,11 @@
             list-type="picture-card"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
-            :on-success='uploadSuccess'
+            name="files"
           >
             <i class="el-icon-plus"></i>
           </el-upload>
+          <el-button type="primary" @click="handleClick()">提交评论</el-button>
           <div class="writeComment" style="margin:20px 0">写评论</div>
           <PostComment v-for="(v,i) in commentsList" :key="i" :comment="v" />
           <!-- 分页器 -->
@@ -69,13 +70,13 @@ export default {
   },
   methods: {
     // 预览图片时候触发的事件
-    handlePictureCardPreview(){},
+    handlePictureCardPreview() {},
 
     //移出图片时候触发的
-    handleRemove(){},
+    handleRemove() {},
 
     //上传成功时候触发的事件
-    uploadSuccess(response, file, fileList){
+    uploadSuccess(response, file, fileList) {
       console.log(response, file, fileList);
     },
 
