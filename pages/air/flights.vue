@@ -12,10 +12,6 @@
         <!-- 航班信息 -->
         <FlightsItem v-for="(item, index) in dataList" :key="index" :data="item" />
 
-        <!-- 分页布局 -->
-        <!-- size-change：切换条数时候触发 -->
-        <!-- current-change: 切换页数时候触发 -->
-        <!-- page-size: 默认一页多少条数据 -->
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
