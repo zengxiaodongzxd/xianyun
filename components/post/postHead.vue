@@ -6,7 +6,7 @@
     </el-breadcrumb>
     <h1 style="border-bottom:2px solid #ccc;padding-bottom:25px">{{postDetail.title}}</h1>
     <el-row class="time">
-      <span>攻略：{{postDetail.updated_at}}&nbsp;&nbsp;&nbsp;阅读： {{postDetail.watch}}</span>
+      <span>攻略：{{postDetail.created_at| formatDate}}&nbsp;&nbsp;&nbsp;阅读： {{postDetail.watch}}</span>
     </el-row>
     <el-row v-html="postDetail.content" class="content"></el-row>
     <el-row type="flex" justify="center" class="share">
@@ -24,13 +24,14 @@
       </el-col>
       <el-col>
         <i class="iconfont iconding" @click="like(postDetail.id)"></i>
-        <span>点赞()</span>
+        <span>点赞({{postDetail.like}})</span>
       </el-col>
     </el-row>
   </div>
 </template>
 <script>
-import moment from "moment";
+import { formatDate } from "assets/js/date.js";
+
 export default {
   data() {
     return {
@@ -39,6 +40,14 @@ export default {
       }
     };
   },
+  filters: {
+    formatDate(time) {
+      var date = new Date(time);
+
+      return formatDate(date, "yyyy-MM-dd hh:mm");
+    }
+  },
+
   mounted() {
     this.getData();
   },
@@ -63,8 +72,8 @@ export default {
         headers: {
           Authorization: `Bearer ${this.$store.state.user.userInfo.token}`
         },
-        params:{
-          id:id
+        params: {
+          id: id
         }
       });
     },
@@ -81,9 +90,10 @@ export default {
         console.log(this.postDetail);
         this.postDetail.updated_at = res.data.data[0].updated_at;
         console.log(this.postDetail.updated_at);
-        this.postDetail.updated_at = moment(this.postDetail.updated_at).format(
-          "YYYY-MM-DD HH:mm"
-        );
+        // this.postDetail.updated_at = moment(this.postDetail.updated_at).format(
+        //   "YYYY-MM-DD HH:mm"
+        // );
+        // this.postDetail.updated_at = Conversiontime(this.postDetail.updated_at);
       });
     }
   },
