@@ -3,14 +3,15 @@
     <h4 class="headline">相关攻略</h4>
     <nuxt-link
       :to="`/post/detail?id=${item.id}`"
-     
       v-for="(item,index) in recommendInfo"
       :key="index"
     >
-      <div  class="box">
-        <img :src="item.images[0]" alt />
+      <div class="box">
+        <div>
+          <img :src="item.images[0]" alt />
+        </div>
         <span class="title">{{item.title}}</span>
-        <span class="time">{{item.updated_at}}&nbsp;阅读：{{item.watch}}</span>
+        <span class="time">{{item.created_at| formatDate}}&nbsp;阅读：{{item.watch}}</span>
       </div>
     </nuxt-link>
     <!-- <div class="box" v-for="(item,index) in recommendInfo" :key="index">
@@ -21,7 +22,7 @@
   </div>
 </template>
 <script>
-import moment, { localeData } from "moment";
+import { formatDate } from "assets/js/date.js";
 export default {
   data() {
     return {
@@ -29,7 +30,7 @@ export default {
     };
   },
   mounted() {
-      const { query } = this.$route;
+    const { query } = this.$route;
     // console.log(query.id);
     this.$axios({
       url: "/posts/recommend",
@@ -41,7 +42,13 @@ export default {
       this.recommendInfo = res.data.data;
       console.log(this.recommendInfo);
     });
-    
+  },
+  filters: {
+    formatDate(time) {
+      var date = new Date(time);
+
+      return formatDate(date, "yyyy-MM-dd hh:mm");
+    }
   }
 };
 </script>
@@ -61,9 +68,14 @@ export default {
   padding: 25px 0;
   border-bottom: 2px solid #ccc;
   position: relative;
-  img {
+  div {
     width: 100px;
     height: 80px;
+    border: 1px solid #ccc;
+    img {
+      width: 100%;
+      height: 100%;
+    }
   }
   .title {
     width: 140px;

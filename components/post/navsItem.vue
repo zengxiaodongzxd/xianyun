@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
   <div class="div">
     <div
       v-for="(item, index) in data"
@@ -12,15 +11,6 @@
         v-if="item.children && item.children.length"
         :data="item.children"
       />
-=======
-    <div class="div">
-        <div v-for="(item, index) in  data" :key="index">
-            {{ item.content }}
-
-            <!-- 自己调用自己 -->
-            <NavsItem :data="item.followed" />
-        </div>
->>>>>>> a25ef757108f938bb1e0373ee0fa3e86044e57c1
     </div>
   </div>
 </template>
